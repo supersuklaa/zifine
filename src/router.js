@@ -19,13 +19,24 @@ export const Link = (props, children) => {
 };
 
 export default () => {
-  const setSite = (value) => tree.select('site').set(value);
+  const setSite = (value) => {
+    tree.select('thinking').set(true);
+    setTimeout(() => {
+      fetch(`https://jsonplaceholder.typicode.com/posts/${value}`)
+        .then((response) => response.json())
+        .then(({ title, body }) => {
+          tree.select('site').set(title.split(' ').slice(0, 3).join(' '));
+          tree.select('body').set(body);
+          tree.select('thinking').set(false);
+        });
+    }, 500);
+  };
 
   router
     .on({
       'products:/:id': () => setSite('About'),
-      'products': () => setSite('Products'), // eslint-disable-line quote-props
-      '*': () => setSite('Home'),
+      'products': () => setSite('60'), // eslint-disable-line quote-props
+      '*': () => setSite('1'),
     })
     .resolve();
 };

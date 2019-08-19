@@ -8,6 +8,21 @@ const start = (node, view, state = {}) => {
 
   tree.select().set(state);
 
+  // const mutationObserver = new MutationObserver((mutations) => {
+  //   mutations.forEach((mutation) => {
+  //     if (mutation.target.classList.contains('inactive')) {
+  //       setTimeout(() => {
+  //         mutation.target.classList.remove('inactive');
+  //       }, 200);
+  //     }
+  //   });
+  // });
+
+  // mutationObserver.observe(node, {
+  //   attributes: true,
+  //   subtree: true,
+  // });
+
   return tree;
 };
 
