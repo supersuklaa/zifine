@@ -1,13 +1,13 @@
 import { h } from 'superfine';
-import { tree } from './app';
+import { tree } from '../app';
 
 export default () => {
-  const { title, body, thinking, id } = tree.get();
+  const { title, body, buffering, id } = tree.get();
 
   const css = ['content'];
   const pid = `page-${id}`;
 
-  if (thinking) {
+  if (buffering) {
     css.push('inactive');
   } else if (body) {
     setTimeout(() => {

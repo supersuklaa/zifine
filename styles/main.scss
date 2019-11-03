@@ -44,7 +44,7 @@ body {
   margin: 1em auto 6em;
   max-width: 550px;
   opacity: 1;
-  transition: .5s opacity;
+  transition: .6s opacity;
 
   &.inactive {
     opacity: 0;
@@ -166,6 +166,7 @@ nav {
         font-size: .7em;
         color: rgba(265, 265, 265, .7);
         text-decoration: none;
+        transition: .5s color;
 
         &:hover {
           text-decoration: underline;

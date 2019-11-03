@@ -1,5 +1,3 @@
-import { h, patch } from 'superfine';
-
 import app from './app';
 import view from './view';
 import router from './router';
@@ -13,7 +11,7 @@ fetch(`${process.env.API_URL}/menus/main`)
       id: page['object_id'], // eslint-disable-line dot-notation
       title: page.title,
     }));
-    app(node, view, { pages });
+    app(node, view, { pages, buffering: true });
   });
 
 router();
