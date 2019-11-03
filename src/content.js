@@ -2,24 +2,23 @@ import { h } from 'superfine';
 import { tree } from './app';
 
 export default () => {
-  const updateCount = (value) => tree.select('count').set(value);
-  const updateBody = (value) => tree.select('body').set(value);
+  const { title, body, thinking, id } = tree.get();
 
-  const { site, body, thinking } = tree.get();
-
-  const css = ['content', site];
+  const css = ['content'];
+  const pid = `page-${id}`;
 
   if (thinking) {
     css.push('inactive');
+  } else if (body) {
+    setTimeout(() => {
+      document.getElementById(pid).innerHTML = body;
+    });
   }
 
   return (
     <section class={css.join(' ')}>
-      <h1>Moi!</h1>
-      <h2>{site}</h2>
-      <p>
-        {body}
-      </p>
+      <h1 class='site-title'>{title}</h1>
+      <div id={pid}></div>
     </section>
   );
 };

@@ -1,13 +1,15 @@
 import { h } from 'superfine';
 
-import Header from './header';
+// import Header from './header';
 import Content from './content';
 import Menu from './menu';
 
 export default () => (
-  <div class='max-width'>
-    <Header />
+  <div class='holder'>
     <Menu />
-    <Content />
+    <div class='max-width'>
+      {/* <Header /> */}
+      <Content />
+    </div>
   </div>
 );

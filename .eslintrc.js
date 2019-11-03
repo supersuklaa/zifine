@@ -22,5 +22,6 @@ module.exports = {
     'no-restricted-globals': 1,
     'no-param-reassign': 0,
     'no-plusplus': 0,
+    'object-curly-newline': 0,
   },
 };

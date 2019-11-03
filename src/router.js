@@ -18,25 +18,34 @@ export const Link = (props, children) => {
   );
 };
 
-export default () => {
-  const setSite = (value) => {
-    tree.select('thinking').set(true);
-    setTimeout(() => {
-      fetch(`https://jsonplaceholder.typicode.com/posts/${value}`)
-        .then((response) => response.json())
-        .then(({ title, body }) => {
-          tree.select('site').set(title.split(' ').slice(0, 3).join(' '));
-          tree.select('body').set(body);
-          tree.select('thinking').set(false);
-        });
-    }, 500);
-  };
+const setCSS = (key, value) => {
+  const root = document.documentElement;
+  root.style.setProperty(key, value);
+};
 
+const setSite = (value) => {
+  tree.select('thinking').set(true);
+  setTimeout(() => {
+    fetch(`${process.env.API_URL}/wp/v2/pages/${value}`)
+      .then((response) => response.json())
+      .then(({ title, content, acf, id }) => {
+        tree.select('title').set(title.rendered);
+        tree.select('id').set(id);
+        tree.select('body').set(content.rendered);
+        tree.select('thinking').set(false);
+
+        setCSS('--light-color', acf.light_color);
+        setCSS('--dark-color', `${acf.dark_color}dd`);
+        document.body.style.backgroundImage = `url('${acf.hero_image.url}')`;
+      });
+  }, 500);
+};
+
+export default () => {
   router
     .on({
-      'products:/:id': () => setSite('About'),
-      'products': () => setSite('60'), // eslint-disable-line quote-props
-      '*': () => setSite('1'),
+      'page/:id': ({ id }) => setSite(id), // eslint-disable-line quote-props
+      '*': () => setSite('2'),
     })
     .resolve();
 };

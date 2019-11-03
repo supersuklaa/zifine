@@ -6,11 +6,14 @@ import router from './router';
 
 const node = document.getElementById('app');
 
-const state = {
-  site: 'Home',
-  count: 0,
-};
-
-app(node, view, state);
+fetch(`${process.env.API_URL}/menus/main`)
+  .then((response) => response.json())
+  .then((response) => {
+    const pages = response.map((page) => ({
+      id: page['object_id'], // eslint-disable-line dot-notation
+      title: page.title,
+    }));
+    app(node, view, { pages });
+  });
 
 router();
