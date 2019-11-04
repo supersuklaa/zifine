@@ -5,25 +5,72 @@ export const setCSS = (key, value) => {
   root.style.setProperty(key, value);
 };
 
-export const setSite = (value) => {
+export const formatDate = (date = '') => {
+  const opt = { year: 'numeric', month: 'long', day: 'numeric' };
+  const dateObj = new Date(date);
+
+  return dateObj.toLocaleDateString('en-US', opt);
+};
+
+export const getMenuItems = () => new Promise((resolve, reject) => {
+  fetch(`${process.env.API_URL}/menus/main`)
+    .then((response) => response.json())
+    .then((response) => {
+      const items = response.map((item) => ({
+        id: item['object_id'], // eslint-disable-line dot-notation
+        label: item.title,
+      }));
+
+      resolve(items);
+    })
+    .catch((err) => reject(err));
+});
+
+export const getPage = (item) => new Promise((resolve) => {
+  fetch(`${process.env.API_URL}/wp/v2/pages/${item.id}`)
+    .then((response) => response.json())
+    .then(({ title, content, acf, date }) => resolve({
+      id: item.id,
+      title: title.rendered,
+      label: item.label,
+      date,
+      body: content.rendered,
+      imageUrl: acf.hero_image.url,
+      colors: { light: acf.light_color, dark: acf.dark_color },
+    }));
+});
+
+const loadPageBgs = (pages) => new Promise((resolve) => {
+  pages.forEach(({ imageUrl }) => {
+    (new Image()).src = imageUrl;
+  });
+
+  resolve(pages);
+});
+
+export const loadPages = () => new Promise((resolve) => {
+  getMenuItems().then((items) => {
+    Promise.all(items.map((item) => getPage(item)))
+      .then((pages) => loadPageBgs(pages))
+      .then((pages) => resolve(pages));
+  });
+});
+
+export const changeToPage = (id) => {
   tree.select('buffering').set(true);
 
-  fetch(`${process.env.API_URL}/wp/v2/pages/${value}`)
-    .then((response) => response.json())
-    .then(({ title, content, acf, id }) => {
-      document.body.style.backgroundImage = `url('${acf.hero_image.url}')`;
+  const page = tree.get('pages', (p) => p.id === id);
 
-      setTimeout(() => {
-        setCSS('--light-color', acf.light_color);
-        setCSS('--dark-color', `${acf.dark_color}dd`);
-      }, 300);
+  setTimeout(() => {
+    document.body.style.backgroundImage = `url('${page.imageUrl}')`;
+    setCSS('--light-color', page.colors.light);
+    setCSS('--dark-color', `${page.colors.dark}dd`);
+  }, 200);
 
-      return {
-        body: content.rendered,
-        buffering: false,
-        id,
-        title: title.rendered,
-      };
-    })
-    .then((args) => setTimeout(() => tree.merge(args), 500));
+  setTimeout(() => {
+    tree.select('page').set(page);
+    tree.select('buffering').set(false);
+
+    document.title = page.title;
+  }, 500, id);
 };

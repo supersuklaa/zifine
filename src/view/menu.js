@@ -5,17 +5,19 @@ import { tree } from '../app';
 
 const ListItem = ({ item }) => {
   const css = [];
-  const id = +item.id;
+  const { id, label } = item;
 
-  if (id === tree.get('id')) {
+  const page = tree.get('page');
+
+  if (page && id === page.id) {
     css.push('active');
   }
 
-  const href = +process.env.FRONTPAGE_ID === id ? '/' : `/page/${id}`;
+  const href = process.env.FRONTPAGE_ID === id ? '/' : `/page/${id}`;
 
   return (
     <li class={css.join(' ')}>
-      <Link href={href}>{item.title}</Link>
+      <Link href={href}>{label}</Link>
     </li>
   );
 };

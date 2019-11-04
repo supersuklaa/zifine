@@ -1,5 +1,6 @@
-
-$text-color: #333;
+@mixin for-phone {
+  @media (max-width: 599px) { @content; }
+}
 
 :root {
   --light-color: #fafafa;
@@ -18,13 +19,14 @@ html {
 body {
   font-family: Tahoma, Geneva, sans-serif;
   color: #fafafa;
-  background: #333;
   transition: .5s background-image;
 
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
+
+  background-image: url(data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=);
 }
 
 .holder {
@@ -41,8 +43,13 @@ body {
 }
 
 .content {
-  margin: 1em auto 6em;
-  max-width: 550px;
+  @include for-phone {
+    max-width: calc(100% - 20px);
+    margin: 1em auto;
+  }
+
+  margin: 2em auto 6em;
+  max-width: 670px;
   opacity: 1;
   transition: .6s opacity;
 
@@ -50,26 +57,41 @@ body {
     opacity: 0;
   }
 
-  h1 {
-    &.site-title {
+  .site-title {
+    position: relative;
+
+    .site-date {
+      @include for-phone {
+        right: auto;
+        bottom: -2.5em;
+      }
+
+      font-family: serif;
+      font-style: italic;
+      position: absolute;
+      right: 0;
+      bottom: 3em;
+    }
+
+    h1 {
+      @include for-phone {
+        font-size: 2em;
+        padding: 0 1em .8em .4em;
+        margin: 0 -.4em 1.9em;
+      }
+
       font-size: 2.5em;
-      margin: 0 -.4em .9em;
-      padding: 0 .4em .8em;
       border-bottom-width: .15em;
       border-bottom-color: var(--light-color);
       border-bottom-style: double;
+      margin: 0 -.4em .9em;
+      padding: 0 5em .8em .4em;
     }
   }
 
   a,
   em {
     color: var(--light-color);
-  }
-
-  strong {
-    // background-color: var(--dark-color);
-    // padding: .2em;
-    // border-radius: 5px;
   }
 
   a {
@@ -148,8 +170,12 @@ nav {
   text-align: right;
 
   ul {
+    @include for-phone {
+      margin-right: -1em;
+    }
+
     margin: 0;
-    padding: .5em 1em;
+    padding: .25em 1em .5em;
     list-style: none;
 
     li {
@@ -174,4 +200,56 @@ nav {
       }
     }
   }
+}
+
+.accept-cookies {
+  z-index: 55;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #555453;
+  text-align: center;
+  opacity: 1;
+  transition: 1s opacity;
+
+  &.hidden {
+    opacity: 0;
+  }
+
+  h1 {
+    margin-top: 3em;
+    animation-delay: .5s;
+  }
+
+  h2 {
+    animation-delay: 1.7s;
+  }
+
+  h3 {
+    animation-delay: 2.9s;
+    background-color: #476c99;
+    border-radius: 28px;
+    display: inline-block;
+    cursor: pointer;
+    color: #fff;
+    font-size: 17px;
+    padding: 16px 31px;
+
+    &.accepted {
+      background-color: #339d37;
+    }
+  }
+
+  * {
+    opacity: 0;
+    animation: fadeIn ease-in 1;
+
+    animation-fill-mode: forwards;
+    animation-duration: 1s;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

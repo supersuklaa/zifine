@@ -1,23 +1,36 @@
 import { h } from 'superfine';
 import { tree } from '../app';
+import { formatDate } from '../utils';
 
 export default () => {
-  const { title, body, buffering, id } = tree.get();
+  const { buffering, page } = tree.get();
+
+  if (!page) {
+    return (
+      <section class='content inactive'>
+      </section>
+    );
+  }
 
   const css = ['content'];
-  const pid = `page-${id}`;
+  const pid = `page-${page.id}`;
 
   if (buffering) {
     css.push('inactive');
-  } else if (body) {
+  } else if (page.body) {
     setTimeout(() => {
-      document.getElementById(pid).innerHTML = body;
+      document.getElementById(pid).innerHTML = page.body;
     });
   }
 
+  const date = formatDate(page.date);
+
   return (
     <section class={css.join(' ')}>
-      <h1 class='site-title'>{title}</h1>
+      <div class='site-title'>
+        <h1>{page.title}</h1>
+        <div class='site-date'>{date}</div>
+      </div>
       <div id={pid}></div>
     </section>
   );

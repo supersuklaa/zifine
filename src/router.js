@@ -1,7 +1,7 @@
 import { h } from 'superfine';
 import Navigo from 'navigo';
 
-import { setSite } from './utils';
+import { changeToPage } from './utils';
 
 const router = new Navigo(process.env.ROOT_URL || null);
 
@@ -20,7 +20,7 @@ export const Link = (props, children) => {
 
 export default () => {
   router.on({
-    '/page/:id': ({ id }) => setSite(id), // eslint-disable-line quote-props
-    '*': () => setSite(process.env.FRONTPAGE_ID),
+    '/page/:id': ({ id }) => changeToPage(id), // eslint-disable-line quote-props
+    '*': () => changeToPage(process.env.FRONTPAGE_ID),
   }).resolve();
 };
