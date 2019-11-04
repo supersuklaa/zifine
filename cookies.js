@@ -10,7 +10,7 @@ if (localStorage.getItem('acceptCookies') === null) {
 
   const h1 = createEl('h1', 'Hello!');
   const h2 = createEl('h2', 'Cookies?');
-  const h3 = createEl('h3', 'Sure.');
+  const h3 = createEl('h3', 'Sure, why not?');
 
   const cookiesDiv = document.getElementById('accept-cookies');
 

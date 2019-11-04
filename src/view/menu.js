@@ -5,7 +5,7 @@ import { tree } from '../app';
 
 const ListItem = ({ item }) => {
   const css = [];
-  const { id, label } = item;
+  const { id, label, slug } = item;
 
   const page = tree.get('page');
 
@@ -13,7 +13,7 @@ const ListItem = ({ item }) => {
     css.push('active');
   }
 
-  const href = process.env.FRONTPAGE_ID === id ? '/' : `/page/${id}`;
+  const href = process.env.FRONTPAGE_ID === id ? '/' : `/${slug}`;
 
   return (
     <li class={css.join(' ')}>

@@ -27,12 +27,15 @@ body {
   background-position: center;
 
   background-image: url(data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=);
+
+  will-change: background-image;
 }
 
 .holder {
   background: var(--dark-color);
   min-height: 100%;
   overflow: auto;
+  transition: .5 background-color;
 }
 
 .max-width {

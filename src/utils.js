@@ -29,11 +29,12 @@ export const getMenuItems = () => new Promise((resolve, reject) => {
 export const getPage = (item) => new Promise((resolve) => {
   fetch(`${process.env.API_URL}/wp/v2/pages/${item.id}`)
     .then((response) => response.json())
-    .then(({ title, content, acf, date }) => resolve({
+    .then(({ title, content, acf, date, slug }) => resolve({
       id: item.id,
       title: title.rendered,
       label: item.label,
       date,
+      slug,
       body: content.rendered,
       imageUrl: acf.hero_image.url,
       colors: { light: acf.light_color, dark: acf.dark_color },
@@ -56,10 +57,8 @@ export const loadPages = () => new Promise((resolve) => {
   });
 });
 
-export const changeToPage = (id) => {
+const turnPageTo = (page) => {
   tree.select('buffering').set(true);
-
-  const page = tree.get('pages', (p) => p.id === id);
 
   setTimeout(() => {
     document.body.style.backgroundImage = `url('${page.imageUrl}')`;
@@ -72,5 +71,17 @@ export const changeToPage = (id) => {
     tree.select('buffering').set(false);
 
     document.title = page.title;
-  }, 500, id);
+  }, 500);
+};
+
+export const changeToPageBySlug = (slug) => {
+  const page = tree.get('pages', (p) => p.slug === slug);
+
+  turnPageTo(page);
+};
+
+export const changeToPageById = (id) => {
+  const page = tree.get('pages', (p) => p.id === id);
+
+  turnPageTo(page);
 };

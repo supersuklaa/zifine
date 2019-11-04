@@ -17,7 +17,7 @@ export default () => {
 
   if (buffering) {
     css.push('inactive');
-  } else if (page.body) {
+  } else {
     setTimeout(() => {
       document.getElementById(pid).innerHTML = page.body;
     });
