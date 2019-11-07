@@ -15,21 +15,18 @@ export const formatDate = (date = '') => {
 export const getMenuItems = () => new Promise((resolve, reject) => {
   fetch(`${process.env.API_URL}/menus/main`)
     .then((response) => response.json())
-    .then((response) => {
-      const items = response.map((item) => ({
-        id: item['object_id'], // eslint-disable-line dot-notation
-        label: item.title,
-      }));
-
-      resolve(items);
-    })
+    .then((response) => response.map((item) => ({
+      id: item['object_id'], // eslint-disable-line dot-notation
+      label: item.title,
+    })))
+    .then((items) => resolve(items))
     .catch((err) => reject(err));
 });
 
 export const getPage = (item) => new Promise((resolve) => {
   fetch(`${process.env.API_URL}/wp/v2/pages/${item.id}`)
     .then((response) => response.json())
-    .then(({ title, content, acf, date, slug }) => resolve({
+    .then(({ title, content, acf, date, slug }) => ({
       id: item.id,
       title: title.rendered,
       label: item.label,
@@ -38,7 +35,8 @@ export const getPage = (item) => new Promise((resolve) => {
       body: content.rendered,
       imageUrl: acf.hero_image.url,
       colors: { light: acf.light_color, dark: acf.dark_color },
-    }));
+    }))
+    .then((params) => resolve(params));
 });
 
 const loadPageBgs = (pages) => new Promise((resolve) => {
@@ -50,11 +48,10 @@ const loadPageBgs = (pages) => new Promise((resolve) => {
 });
 
 export const loadPages = () => new Promise((resolve) => {
-  getMenuItems().then((items) => {
-    Promise.all(items.map((item) => getPage(item)))
-      .then((pages) => loadPageBgs(pages))
-      .then((pages) => resolve(pages));
-  });
+  getMenuItems()
+    .then((items) => Promise.all(items.map(getPage)))
+    .then((pages) => loadPageBgs(pages))
+    .then((pages) => resolve(pages));
 });
 
 const turnPageTo = (page) => {

@@ -20,7 +20,7 @@ export const Link = (props, children) => {
 
 export default () => {
   router.on({
-    '/:slug': ({ slug }) => changeToPageBySlug(slug), // eslint-disable-line quote-props
+    '/:slug': ({ slug }) => changeToPageBySlug(slug),
     '*': () => changeToPageById(process.env.FRONTPAGE_ID),
   }).resolve();
 };

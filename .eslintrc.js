@@ -19,9 +19,6 @@ module.exports = {
     'react/jsx-indent': [2, 2],
     'quotes': [2, 'single', { 'avoidEscape': true }],
     'jsx-quotes': ['error', 'prefer-single'],
-    'no-restricted-globals': 1,
-    'no-param-reassign': 0,
-    'no-plusplus': 0,
     'object-curly-newline': 0,
   },
 };
