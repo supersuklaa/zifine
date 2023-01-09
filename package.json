@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "baobab": "^2.5.2",
+    "baobab": "^2.6.1",
     "navigo": "^7.1.2",
     "superfine": "^7.0.0"
   },
